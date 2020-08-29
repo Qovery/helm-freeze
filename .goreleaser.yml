@@ -1,0 +1,32 @@
+builds:
+  - main: main.go
+    binary: helm-freeze
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+checksum:
+  name_template: 'checksums.txt'
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+brews:
+  -
+    name: helm-freeze
+    goarm: 6
+    github:
+      owner: qovery
+      name: homebrew-helm-freeze
+    url_template: "https://github.com/Qovery/helm-freeze/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    commit_author:
+      name: Pierre Mavro
+      email: pmavro@qovery.com
+    folder: Formula
+    homepage: ""
+    description: "Freeze your charts in the wished versions"
+    skip_upload: false
