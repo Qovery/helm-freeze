@@ -18,6 +18,7 @@ Running a git diff then will help to see any differences`,
 		configFile, _ := cmd.Flags().GetString("config-file")
 		config, err := cfg.ValidateConfig(configFile)
 		if err != nil {
+			fmt.Println(err)
 			os.Exit(1)
 		}
 

@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/Qovery/helm-freeze/cfg"
 	"os"
 
@@ -15,8 +16,10 @@ var validateCmd = &cobra.Command{
 		configFile, _ := cmd.Flags().GetString("config-file")
 		_, err := cfg.ValidateConfig(configFile)
 		if err != nil {
+			fmt.Println(err)
 			os.Exit(1)
 		}
+		fmt.Println("Configuration is valid")
 	},
 }
 
