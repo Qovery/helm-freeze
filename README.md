@@ -1,7 +1,9 @@
 # helm-freeze
-Freeze your charts in the wished versions
+Freeze your charts in the wished versions. Helm freeze helps you to declare the charts
+you want to use in a desired version and download them locally. This to freeze/lock them
+directly in your Git repository.
 
-Why is this tool is useful:
+The advantages are:
 * Follow GitOps philosophy
 * Know exactly what has changed between 2 charts version with a `git diff`
 * One place to list them all
