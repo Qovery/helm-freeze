@@ -45,11 +45,11 @@ charts:
     # The repo to use (declared below in the repos section)
     repo_name: jetstack
     # No destinations is declared, the default one will be used
-    comment: "You can add comment everywhere"
+    comment: "You can add comments"
   - name: fluent-bit
     repo_name: lifen
     version: 2.8.0
-    # If for some reasons you want to stop syncing a specific chart
+    # If you temporary want to stop syncing a specific chart
     no_sync: true
   - name: nginx-ingress
     # No repo_name is specified, stable will be used
