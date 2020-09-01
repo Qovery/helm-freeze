@@ -70,22 +70,34 @@ func GetAllCharts(config cfg.Config, configPath string) error {
 		// move the current folder to avoid helm failure
 		chartFolderDestName := destinationFolder + "/" + chart["name"]
 		oldChartFolderDestName := chartFolderDestName + ".old"
-		err := os.Rename(chartFolderDestName, oldChartFolderDestName)
-		if err != nil {
-			return err
+
+		chartExists := false
+		if _, err := os.Stat(chartFolderDestName); !os.IsNotExist(err) {
+			chartExists = true
+		}
+
+		if chartExists {
+			err := os.Rename(chartFolderDestName, oldChartFolderDestName)
+			if err != nil {
+				return err
+			}
 		}
 
 		err = helmDownload(chartUrl, chart["version"], destinationFolder)
 		if err != nil {
-			// restore old chart on failure
-			_ = os.Rename(oldChartFolderDestName, chartFolderDestName)
+			if chartExists {
+				// restore old chart on failure
+				_ = os.Rename(oldChartFolderDestName, chartFolderDestName)
+			}
 			return err
 		}
 
 		// finally remove the old chart
-		err = os.RemoveAll(oldChartFolderDestName)
-		if err != nil {
-			return err
+		if chartExists {
+			err = os.RemoveAll(oldChartFolderDestName)
+			if err != nil {
+				return err
+			}
 		}
 	}
 

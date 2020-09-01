@@ -7,6 +7,10 @@ builds:
       - windows
     goarch:
       - amd64
+archives:
+  - format_overrides:
+      - goos: windows
+        format: zip
 checksum:
   name_template: 'checksums.txt'
 changelog:
@@ -30,3 +34,15 @@ brews:
     homepage: ""
     description: "Freeze your charts in the wished versions"
     skip_upload: false
+
+scoop:
+  url_template: "https://github.com/Qovery/helm-freeze/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+  bucket:
+    owner: qovery
+    name: scoop-helm-freeze
+  commit_author:
+    name: qovery
+    email: contact@qovery.com
+  homepage: "https://docs.qovery.com"
+  description: "Freeze your charts in the wished versions"
+  license: GPL3
