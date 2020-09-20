@@ -114,7 +114,7 @@ func helmDownload(chartUrl string, version string, dest string) error {
 }
 
 func helmRepoAdd(name string, url string) error {
-	cmd := exec.Command("helm", "repo", "add", name, url)
+	cmd := exec.Command("helm", "repo", "add", "--force-update", name, url)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		return errors.New(string(out))
