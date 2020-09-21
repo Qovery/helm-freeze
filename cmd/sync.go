@@ -15,6 +15,7 @@ var syncCmd = &cobra.Command{
 	Long: `Download charts and un compress in the desired folders from the given configuration file information.
 Running a git diff then will help to see any differences`,
 	Run: func(cmd *cobra.Command, args []string) {
+		errorsDuringSync := false
 		configFile, _ := cmd.Flags().GetString("config-file")
 		config, err := cfg.ValidateConfig(configFile)
 		if err != nil {
@@ -28,12 +29,22 @@ Running a git diff then will help to see any differences`,
 			os.Exit(1)
 		}
 
+		err = exec.HelmRepoUpdate()
+		if err != nil {
+			fmt.Printf("Error message: %s", err)
+			errorsDuringSync = true
+		}
+
 		err = exec.GetAllCharts(config, configFile)
 		if err != nil {
 			fmt.Printf("Error message: %s", err)
 			os.Exit(1)
 		}
 
+		if errorsDuringSync {
+			fmt.Println("\nSync ended with errors")
+			os.Exit(1)
+		}
 		fmt.Println("\nSync succeed!")
 	},
 }

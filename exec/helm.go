@@ -121,3 +121,13 @@ func helmRepoAdd(name string, url string) error {
 	}
 	return nil
 }
+
+func HelmRepoUpdate() error {
+	fmt.Println("\n[+] Updating helm repos")
+	cmd := exec.Command("helm", "repo", "update")
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return errors.New(string(out))
+	}
+	return nil
+}
