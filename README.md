@@ -73,9 +73,24 @@ destinations:
     path: ./my/relative/path
 ```
 
-Then use `sync` arg to locally download the declared versions:
+Then use `sync` arg to locally download the declared versions, here is an example:
 ```bash
-helm-freeze sync
+$ helm-freeze sync
+
+[+] Adding helm repos
+ -> stable
+ -> aws
+
+[+] Updating helm repos
+
+[+] Downloading charts
+ -> stable/nginx-ingress 1.35.0
+ -> stable/prometheus-operator 8.15.12
+ -> stable/elasticsearch-curator 2.1.5
+ -> aws/aws-node-termination-handler 0.8.0
+ -> aws/aws-vpc-cni 1.0.9
+
+Sync succeed!
 ```
 
 If you update a chart, launch `sync` and you'll be able to see the differences with `git diff`.
