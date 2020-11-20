@@ -52,7 +52,7 @@ jobs:
           echo "md5sums=('${md5version}')" >> PKGBUILD
       - 
         name: Publish AUR package
-        uses: KSXGitHub/github-actions-deploy-aur@master
+        uses: KSXGitHub/github-actions-deploy-aur@v2.2.2
         with:
           pkgname: helm-freeze
           pkgbuild: ./PKGBUILD
