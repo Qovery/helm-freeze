@@ -60,7 +60,7 @@ charts:
 repos:
     # Stable is the default one
   - name: stable
-    url: https://kubernetes-charts.storage.googleapis.com
+    url: https://charts.helm.sh/stable
   - name: jetstack
     url: https://charts.jetstack.io
   - name: lifen
