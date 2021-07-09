@@ -6,6 +6,7 @@ import (
 	"github.com/Qovery/helm-freeze/cfg"
 	"github.com/Qovery/helm-freeze/util"
 	"github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/otiai10/copy"
 	"os"
 	"os/exec"
@@ -208,7 +209,7 @@ func getGitChart(chart map[string]string, destinations map[string]string, repos 
 		}
 	}
 
-	clonedRepoDir, err := gitClone(chartUrl)
+	clonedRepoDir, err := gitClone(chartUrl, chart["version"])
 	if err != nil {
 		if chartExists {
 			// restore old chart on failure
@@ -238,14 +239,27 @@ func getGitChart(chart map[string]string, destinations map[string]string, repos 
 	return nil
 }
 
-func gitClone(gitUrl string) (string, error) {
+func gitClone(gitUrl string, commitSha string) (string, error) {
 	// create tmp dir to clone to this dir
 	tmpDir, err := util.MkdirTemp()
 	if err != nil {
 		return "", err
 	}
-	_, err = git.PlainClone(tmpDir, false, &git.CloneOptions{
+	r, err := git.PlainClone(tmpDir, false, &git.CloneOptions{
 		URL: gitUrl,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	w, err := r.Worktree()
+	if err != nil {
+		return "", err
+	}
+
+	// git checkout
+	err = w.Checkout(&git.CheckoutOptions{
+		Hash: plumbing.NewHash(commitSha),
 	})
 	if err != nil {
 		return "", err

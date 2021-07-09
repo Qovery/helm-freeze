@@ -69,7 +69,8 @@ charts:
     # When using a git repo, chart_path is mandatory, you need to specify the chart folder path
     chart_path: /charts/pleco
     dest: custom
-    version: v0.8.4
+    # Set git reference
+    version: 5e05faddb0fde1f5ddd822c3d3ba72925f094e67
 
 repos:
     # Stable is the default one
@@ -108,7 +109,7 @@ $ helm-freeze sync
  -> stable/elasticsearch-curator 2.1.5
  -> aws/aws-node-termination-handler 0.8.0
  -> aws/aws-vpc-cni 1.0.9
- -> git/pleco 0.8.4
+ -> git/pleco 5e05faddb0fde1f5ddd822c3d3ba72925f094e67
 
 Sync succeed!
 ```
