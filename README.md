@@ -1,4 +1,11 @@
 # helm-freeze
+[![Go Report Card](https://goreportcard.com/badge/github.com/Qovery/helm-freeze)](https://goreportcard.com/report/github.com/Qovery/helm-freeze)
+[![Powered](https://img.shields.io/badge/Powered%20by-Qovery-blueviolet)](https://www.qovery.com)
+
+<p align="center">
+    <img src="./helm_freeze_logo.png" width=420 />
+</p>
+
 Freeze your charts in the wished versions. Helm freeze helps you to declare the charts
 you want to use in a desired version and download them locally. This to freeze/lock them
 directly in your Git repository.
