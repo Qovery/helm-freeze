@@ -9,6 +9,7 @@ The advantages are:
 * One place to list them all
 * Works well with monorepo
 * Declarative configuration (YAML file)
+* Supports git repositories in addition to charts repositories
 
 ## Installation
 
@@ -56,6 +57,12 @@ charts:
     version: 1.35.0
     # Change the destination to another one (declared in destinations section)
     dest: custom
+  - name: pleco
+    repo_name: git-repo
+    # When using a git repo, chart_path is mandatory, you need to specify the chart folder path
+    chart_path: /charts/pleco
+    dest: custom
+    version: v0.8.4
 
 repos:
     # Stable is the default one
@@ -65,6 +72,10 @@ repos:
     url: https://charts.jetstack.io
   - name: lifen
     url: https://honestica.github.io/lifen-charts
+  - name: git-repo
+    url: https://github.com/Qovery/pleco.git
+    # If you want to directly use a chart folder in a git repo, set type to git
+    type: git
 
 destinations:
   - name: default
@@ -89,6 +100,7 @@ $ helm-freeze sync
  -> stable/elasticsearch-curator 2.1.5
  -> aws/aws-node-termination-handler 0.8.0
  -> aws/aws-vpc-cni 1.0.9
+ -> git/pleco 0.8.4
 
 Sync succeed!
 ```
