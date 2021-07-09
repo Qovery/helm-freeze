@@ -98,6 +98,7 @@ $ helm-freeze sync
 [+] Adding helm repos
  -> stable
  -> aws
+ -> git-repo
 
 [+] Updating helm repos
 
