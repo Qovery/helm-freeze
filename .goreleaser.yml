@@ -7,6 +7,7 @@ builds:
       - windows
     goarch:
       - amd64
+      - arm64
 archives:
   - format_overrides:
       - goos: windows
@@ -23,7 +24,7 @@ brews:
   -
     name: helm-freeze
     goarm: 6
-    github:
+    tap:
       owner: qovery
       name: homebrew-helm-freeze
     url_template: "https://github.com/Qovery/helm-freeze/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
