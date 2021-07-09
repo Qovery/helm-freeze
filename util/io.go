@@ -5,7 +5,7 @@ import (
 )
 
 func MkdirTemp() (string, error) {
-	dir, err := ioutil.TempDir("","hf_")
+	dir, err := ioutil.TempDir("", "hf_")
 	if err != nil {
 		return "", err
 	}

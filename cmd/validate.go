@@ -11,7 +11,7 @@ import (
 var validateCmd = &cobra.Command{
 	Use:   "validate",
 	Short: "Validate configuration",
-	Long: `Ensure the configuration is valid`,
+	Long:  `Ensure the configuration is valid`,
 	Run: func(cmd *cobra.Command, args []string) {
 		configFile, _ := cmd.Flags().GetString("config-file")
 		_, err := cfg.ValidateConfig(configFile)

@@ -32,7 +32,7 @@ func AddAllRepos(config cfg.Config) error {
 
 type repo struct {
 	name string
-	url string
+	url  string
 	kind string
 }
 
@@ -55,13 +55,13 @@ func GetAllCharts(config cfg.Config, configPath string) error {
 	var repos []repo
 	for _, dest := range config.Repos {
 		repoType := "chart"
-		if val, ok := dest["type"] ; ok {
+		if val, ok := dest["type"]; ok {
 			repoType = val
 		}
 
 		repos = append(repos, repo{
 			name: dest["name"],
-			url: dest["url"],
+			url:  dest["url"],
 			kind: repoType,
 		})
 	}
@@ -126,7 +126,7 @@ func getHelmChart(chart map[string]string, destinations map[string]string) error
 
 	_, err := os.Stat(oldChartFolderDestName)
 	if err == nil {
-		return errors.New(fmt.Sprintf("%s already exists, please fix manually then retry", oldChartFolderDestName))
+		return fmt.Errorf("%s already exists, please fix manually then retry", oldChartFolderDestName)
 	}
 
 	if chartExists {
@@ -198,7 +198,7 @@ func getGitChart(chart map[string]string, destinations map[string]string, repos 
 
 	_, err := os.Stat(oldChartFolderDestName)
 	if err == nil {
-		return errors.New(fmt.Sprintf("%s already exists, please fix manually then retry", oldChartFolderDestName))
+		return fmt.Errorf("%s already exists, please fix manually then retry", oldChartFolderDestName)
 	}
 
 	if chartExists {

@@ -10,7 +10,7 @@ import (
 var initCmd = &cobra.Command{
 	Use:   "init",
 	Short: "create a simple helm-freeze.yaml file",
-	Long: `Create a configuration file with minimal content`,
+	Long:  `Create a configuration file with minimal content`,
 	Run: func(cmd *cobra.Command, args []string) {
 		var minimalConfig = `
 charts:
