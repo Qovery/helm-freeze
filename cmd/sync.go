@@ -23,6 +23,11 @@ Running a git diff then will help to see any differences`,
 			os.Exit(1)
 		}
 
+		onlyCharts, _ := cmd.Flags().GetStringSlice("only-charts")
+		if len(onlyCharts) > 0 {
+			config = cfg.FilterCharts(config, onlyCharts)
+		}
+
 		err = exec.AddAllRepos(config)
 		if err != nil {
 			fmt.Printf("Error message: %s", err)
@@ -53,4 +58,5 @@ func init() {
 	rootCmd.AddCommand(syncCmd)
 
 	syncCmd.Flags().StringP("config-file", "f", "./helm-freeze.yaml", "Configuration file")
+	syncCmd.Flags().StringSlice("only-charts", []string{}, "Sync only these charts")
 }
