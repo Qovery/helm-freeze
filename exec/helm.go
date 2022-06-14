@@ -118,6 +118,11 @@ func getHelmChart(chart map[string]string, destinations map[string]string) error
 
 	// move the current folder to avoid helm failure
 	chartFolderDestName := destinationFolder + "/" + chart["name"]
+	destOverride := ""
+	if _, ok := chart["dest_folder_override"]; ok {
+		chartFolderDestName = destinationFolder + "/" + chart["dest_folder_override"]
+		destOverride = chart["dest_folder_override"]
+	}
 	oldChartFolderDestName := chartFolderDestName + ".old"
 
 	chartExists := false
@@ -137,7 +142,7 @@ func getHelmChart(chart map[string]string, destinations map[string]string) error
 		}
 	}
 
-	err = helmDownload(chartUrl, chart["version"], destinationFolder)
+	err = helmDownload(chart["name"], chartUrl, chart["version"], destinationFolder, destOverride)
 	if err != nil {
 		if chartExists {
 			// restore old chart on failure
@@ -268,11 +273,27 @@ func gitClone(gitUrl string, commitSha string) (string, error) {
 	return tmpDir, nil
 }
 
-func helmDownload(chartUrl string, version string, dest string) error {
-	cmd := exec.Command("helm", "pull", "--untar", "-d", dest, chartUrl, "--version", version)
+func helmDownload(chartName string, chartUrl string, version string, dest string, destOverride string) error {
+	destination := dest
+	if destOverride != "" {
+		destination = dest + "/" + destOverride + ".tmp"
+		if _, err := os.Stat(destination); !os.IsNotExist(err) {
+			os.RemoveAll(destination)
+		}
+	}
+
+	cmd := exec.Command("helm", "pull", "--untar", "-d", destination, chartUrl, "--version", version)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		return errors.New(string(out))
+	}
+
+	if destOverride != "" {
+		err := os.Rename(destination+"/"+chartName, dest+"/"+destOverride)
+		if err != nil {
+			return err
+		}
+		os.RemoveAll(destination)
 	}
 	return nil
 }

@@ -49,11 +49,18 @@ charts:
     # Chart name
   - name: cert-manager
     # Chart version
-    version: v0.16.0
+    version: v1.7.0
     # The repo to use (declared below in the repos section)
     repo_name: jetstack
     # No destinations is declared, the default one will be used
     comment: "You can add comments"
+  - name: cert-manager
+    # Chart version
+    version: v1.8.0
+    # The repo to use (declared below in the repos section)
+    repo_name: jetstack
+    # Override the folder path
+    dest_folder_override: cert-manager-1.8
   - name: fluent-bit
     repo_name: lifen
     version: 2.8.0
