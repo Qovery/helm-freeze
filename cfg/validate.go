@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"gopkg.in/yaml.v2"
-	"io/ioutil"
+	"os"
 )
 
 func ValidateConfig(configFile string) (Config, error) {
@@ -14,7 +14,7 @@ func ValidateConfig(configFile string) (Config, error) {
 	allDestinationsName := make(map[string]bool)
 	allDestinationsPath := make(map[string]bool)
 
-	data, err := ioutil.ReadFile(configFile)
+	data, err := os.ReadFile(configFile)
 	if err != nil {
 		fmt.Printf("Error while reading config file %s: #%v ", configFile, err)
 		return Config{}, err

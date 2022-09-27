@@ -1,11 +1,9 @@
 package util
 
-import (
-	"io/ioutil"
-)
+import "os"
 
 func MkdirTemp() (string, error) {
-	dir, err := ioutil.TempDir("", "hf_")
+	dir, err := os.MkdirTemp("", "hf_")
 	if err != nil {
 		return "", err
 	}

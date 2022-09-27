@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/Qovery/helm-freeze/cfg"
 	"github.com/Qovery/helm-freeze/exec"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 // syncCmd represents the sync command
@@ -58,5 +59,5 @@ func init() {
 	rootCmd.AddCommand(syncCmd)
 
 	syncCmd.Flags().StringP("config-file", "f", "./helm-freeze.yaml", "Configuration file")
-	syncCmd.Flags().StringSlice("only-charts", []string{}, "Sync only these charts")
+	syncCmd.Flags().StringSlice("only-charts", []string{}, "Sync only specified charts, comma separated")
 }

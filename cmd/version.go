@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/spf13/cobra"
 )
 
@@ -15,7 +16,7 @@ var versionCmd = &cobra.Command{
 }
 
 func GetCurrentVersion() string {
-	return "0.5.0" // ci-version-check
+	return "1.0.0" // ci-version-check
 }
 
 func init() {
