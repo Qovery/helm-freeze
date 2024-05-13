@@ -3,8 +3,9 @@ package cfg
 import (
 	"errors"
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"os"
+
+	"gopkg.in/yaml.v2"
 )
 
 func ValidateConfig(configFile string) (Config, error) {
