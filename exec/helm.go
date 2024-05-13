@@ -196,6 +196,9 @@ func getGitChart(chart map[string]string, destinations map[string]string, repos 
 
 	// move the current folder to avoid helm failure
 	chartFolderDestName := destinationFolder + "/" + chart["name"]
+	if _, ok := chart["dest_folder_override"]; ok {
+		chartFolderDestName = destinationFolder + "/" + chart["dest_folder_override"]
+	}
 	oldChartFolderDestName := chartFolderDestName + ".helm_freeze_old"
 
 	chartExists := false
