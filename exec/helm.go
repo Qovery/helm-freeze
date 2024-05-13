@@ -3,14 +3,15 @@ package exec
 import (
 	"errors"
 	"fmt"
+	"os"
+	"os/exec"
+	"path/filepath"
+
 	"github.com/Qovery/helm-freeze/cfg"
 	"github.com/Qovery/helm-freeze/util"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 	"github.com/otiai10/copy"
-	"os"
-	"os/exec"
-	"path/filepath"
 )
 
 func AddAllRepos(config cfg.Config) error {

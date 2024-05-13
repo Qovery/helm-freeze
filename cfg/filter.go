@@ -1,4 +1,4 @@
-package cfg;
+package cfg
 
 func FilterCharts(config Config, charts []string) Config {
 	chartsToFilter := make(map[string]bool)

@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/Qovery/helm-freeze/cfg"
 	"os"
+
+	"github.com/Qovery/helm-freeze/cfg"
 
 	"github.com/spf13/cobra"
 )
