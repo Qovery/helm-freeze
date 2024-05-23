@@ -24,26 +24,26 @@ brews:
   -
     name: helm-freeze
     goarm: 6
-    tap:
+    repository:
       owner: qovery
       name: homebrew-helm-freeze
     url_template: "https://github.com/Qovery/helm-freeze/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
     commit_author:
       name: Pierre Mavro
       email: pmavro@qovery.com
-    folder: Formula
+    directory: Formula
     homepage: ""
     description: "Freeze your charts in the wished versions"
     skip_upload: false
-
-scoop:
-  url_template: "https://github.com/Qovery/helm-freeze/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-  bucket:
-    owner: qovery
-    name: scoop-helm-freeze
-  commit_author:
-    name: qovery
-    email: contact@qovery.com
-  homepage: "https://docs.qovery.com"
-  description: "Freeze your charts in the wished versions"
-  license: GPL3
+scoops:
+  -
+    url_template: "https://github.com/Qovery/helm-freeze/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+    repository:
+      owner: qovery
+      name: scoop-helm-freeze
+    commit_author:
+      name: qovery
+      email: contact@qovery.com
+    homepage: "https://docs.qovery.com"
+    description: "Freeze your charts in the wished versions"
+    license: GPL3

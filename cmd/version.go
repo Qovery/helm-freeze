@@ -16,7 +16,7 @@ var versionCmd = &cobra.Command{
 }
 
 func GetCurrentVersion() string {
-	return "1.0.0" // ci-version-check
+	return "1.1.0" // ci-version-check
 }
 
 func init() {

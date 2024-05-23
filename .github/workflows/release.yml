@@ -23,7 +23,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@main
         with:
-          go-version: 1.19.x
+          go-version: 1.22.x
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
@@ -32,9 +32,9 @@ jobs:
         uses: goreleaser/goreleaser-action@v1
         with:
           version: latest
-          args: release --rm-dist
+          args: release --clean
         env:
-          GITHUB_TOKEN: ${{ secrets.GORELEASER_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GORELEASER_QOVERY_TOKEN }}
       - name: Prepare AUR package
         run: |
           version=$(awk -F'"' '/ci-version-check/{print $2}' cmd/version.go)
