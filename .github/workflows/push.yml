@@ -13,15 +13,15 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@main
         with:
-          go-version: 1.19.x
+          go-version: 1.25.x
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v2
         with:
           version: latest
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v1
+        uses: goreleaser/goreleaser-action@v2
         with:
           version: latest
-          args: release --rm-dist --skip-publish --skip-validate
+          args: release --snapshot --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

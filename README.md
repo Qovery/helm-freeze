@@ -71,6 +71,9 @@ charts:
     version: 1.35.0
     # Change the destination to another one (declared in destinations section)
     dest: custom
+  - name: my-chart
+    repo_name: my-oci
+    version: 1.2.3
   - name: pleco
     repo_name: git-repo
     # When using a git repo, chart_path is mandatory, you need to specify the chart folder path
@@ -91,6 +94,15 @@ repos:
     url: https://github.com/Qovery/pleco.git
     # If you want to directly use a chart folder in a git repo, set type to git
     type: git
+  - name: my-oci
+    # Base repository path inside registry, without scheme
+    # Examples:
+    # - ghcr.io/company/charts
+    # - registry-1.docker.io/helm
+    url: ghcr.io/company/charts
+    # Optional credentials for helm registry login (if required)
+    # username: $MY_OCI_USERNAME
+    # password: $MY_OCI_PASSWORD
 
 destinations:
   - name: default
