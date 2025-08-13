@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 
 	"github.com/Qovery/helm-freeze/cfg"
 	"github.com/Qovery/helm-freeze/util"
@@ -21,6 +22,19 @@ func AddAllRepos(config cfg.Config) error {
 
 		// ignore if git repo
 		if repo["type"] == "git" {
+			continue
+		}
+
+		// handle OCI repos: login if credentials are provided, do not add as classic helm repo
+		isOCI := repo["type"] == "oci" || isOCIURL(repo["url"])
+		if isOCI {
+			username := repo["username"]
+			password := repo["password"]
+			if username != "" {
+				if err := helmRegistryLogin(repo["url"], username, password); err != nil {
+					return err
+				}
+			}
 			continue
 		}
 
@@ -59,6 +73,8 @@ func GetAllCharts(config cfg.Config, configPath string) error {
 		repoType := "chart"
 		if val, ok := dest["type"]; ok {
 			repoType = val
+		} else if isOCIURL(dest["url"]) {
+			repoType = "oci"
 		}
 
 		repos = append(repos, repo{
@@ -83,7 +99,7 @@ func GetAllCharts(config cfg.Config, configPath string) error {
 		}
 
 		if chartType == "chart" {
-			err = getHelmChart(chart, destinations)
+			err = getHelmChart(chart, destinations, repos)
 			if err != nil {
 				return err
 			}
@@ -100,14 +116,36 @@ func GetAllCharts(config cfg.Config, configPath string) error {
 	return nil
 }
 
-func getHelmChart(chart map[string]string, destinations map[string]string) error {
+// isOCIURL returns true if the provided repo url indicates an OCI registry (supports optional leading '@')
+func isOCIURL(url string) bool {
+	u := strings.TrimPrefix(url, "@")
+	return strings.HasPrefix(u, "oci://")
+}
+
+func getHelmChart(chart map[string]string, destinations map[string]string, repos []repo) error {
 	// set default values
 	chartUrl := "stable/" + chart["name"]
 	destinationFolder := destinations["default"]
 
 	// use user defined repo if specified
 	if repoNameDefined, ok := chart["repo_name"]; ok {
-		chartUrl = repoNameDefined + "/" + chart["name"]
+		// detect if the referenced repo is OCI
+		repoIsOCI := false
+		repoBaseUrl := ""
+		for _, r := range repos {
+			if r.name == repoNameDefined {
+				if r.kind == "oci" {
+					repoIsOCI = true
+					repoBaseUrl = r.url
+				}
+				break
+			}
+		}
+		if repoIsOCI || strings.HasPrefix(repoBaseUrl, "oci://") {
+			chartUrl = buildOCIChartURL(repoBaseUrl, chart["name"])
+		} else {
+			chartUrl = repoNameDefined + "/" + chart["name"]
+		}
 	}
 
 	// use user defined destinationFolder if specified
@@ -319,4 +357,47 @@ func HelmRepoUpdate() error {
 		return errors.New(string(out))
 	}
 	return nil
+}
+
+// helmRegistryLogin performs `helm registry login` for an OCI registry host if credentials are provided.
+func helmRegistryLogin(repoURL string, username string, password string) error {
+	host := sanitizeRegistryHost(repoURL)
+	cmd := exec.Command("helm", "registry", "login", host, "-u", username, "-p", password)
+	out, err := cmd.CombinedOutput()
+	if err != nil {
+		return errors.New(string(out))
+	}
+	return nil
+}
+
+// buildOCIChartURL builds a proper oci:// URL regardless of how the repo URL is provided
+func buildOCIChartURL(repoURL string, chartName string) string {
+	// remove leading @ if present and known schemes
+	cleaned := strings.TrimPrefix(repoURL, "@")
+	cleaned = strings.TrimPrefix(cleaned, "oci://")
+	cleaned = strings.TrimPrefix(cleaned, "https://")
+	cleaned = strings.TrimPrefix(cleaned, "http://")
+	cleaned = strings.TrimSuffix(cleaned, "/")
+
+	// if the last path segment already equals chartName, do not append it
+	segments := strings.Split(cleaned, "/")
+	if len(segments) > 0 {
+		last := segments[len(segments)-1]
+		if last == chartName {
+			return "oci://" + cleaned
+		}
+	}
+	return "oci://" + cleaned + "/" + chartName
+}
+
+// sanitizeRegistryHost extracts the registry host for helm registry login
+func sanitizeRegistryHost(repoURL string) string {
+	cleaned := strings.TrimPrefix(repoURL, "@")
+	cleaned = strings.TrimPrefix(cleaned, "oci://")
+	cleaned = strings.TrimPrefix(cleaned, "https://")
+	cleaned = strings.TrimPrefix(cleaned, "http://")
+	if idx := strings.Index(cleaned, "/"); idx != -1 {
+		return cleaned[:idx]
+	}
+	return cleaned
 }

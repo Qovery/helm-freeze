@@ -1,3 +1,5 @@
+version: 2
+
 builds:
   - main: main.go
     binary: helm-freeze
@@ -12,18 +14,22 @@ archives:
   - format_overrides:
       - goos: windows
         format: zip
+    name_template: '{{ .ProjectName }}-{{ .Version }}-{{ .Os }}-{{ .Arch }}'
+    format: tar.gz
+
 checksum:
   name_template: 'checksums.txt'
+
 changelog:
   sort: asc
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
+      - '^docs:'
+      - '^test:'
+      - '^ci:'
+      - '^chore:'
 brews:
-  -
-    name: helm-freeze
-    goarm: 6
+  - name: helm-freeze
     repository:
       owner: qovery
       name: homebrew-helm-freeze
@@ -32,18 +38,17 @@ brews:
       name: Pierre Mavro
       email: pmavro@qovery.com
     directory: Formula
-    homepage: ""
+    homepage: "https://github.com/Qovery/helm-freeze"
     description: "Freeze your charts in the wished versions"
     skip_upload: false
 scoops:
-  -
-    url_template: "https://github.com/Qovery/helm-freeze/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
+  - url_template: "https://github.com/Qovery/helm-freeze/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
     repository:
       owner: qovery
       name: scoop-helm-freeze
     commit_author:
       name: qovery
       email: contact@qovery.com
-    homepage: "https://docs.qovery.com"
+    homepage: "https://github.com/Qovery/helm-freeze"
     description: "Freeze your charts in the wished versions"
-    license: GPL3
+    license: "GPL-3.0"

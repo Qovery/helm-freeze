@@ -14,6 +14,7 @@ func ValidateConfig(configFile string) (Config, error) {
 	allReposUrl := make(map[string]bool)
 	allDestinationsName := make(map[string]bool)
 	allDestinationsPath := make(map[string]bool)
+	requireStableRepo := false
 
 	data, err := os.ReadFile(configFile)
 	if err != nil {
@@ -34,6 +35,10 @@ func ValidateConfig(configFile string) (Config, error) {
 		}
 		if _, ok := chart["version"]; !ok {
 			return cfg, fmt.Errorf("version is missing in %s charts config\n", chart["name"])
+		}
+		if _, ok := chart["repo_name"]; !ok {
+			// If a chart does not specify a repo_name, it implicitly uses the 'stable' repo
+			requireStableRepo = true
 		}
 	}
 
@@ -89,8 +94,10 @@ func ValidateConfig(configFile string) (Config, error) {
 		return cfg, errors.New("missing default destination")
 	}
 
-	if _, ok := allReposName["stable"]; !ok {
-		return cfg, errors.New("missing stable repository")
+	if requireStableRepo {
+		if _, ok := allReposName["stable"]; !ok {
+			return cfg, errors.New("missing stable repository")
+		}
 	}
 
 	return cfg, nil
